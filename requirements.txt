@@ -3,3 +3,8 @@ djangorestframework==3.12.4
 djoser==2.1.0
 django-environ==0.8.1
 Pillow==8.4.0
+pandas==1.4.0
+requests==2.27.1
+tqdm==4.62.3
+numpy==1.22.1
+scipy==1.7.3

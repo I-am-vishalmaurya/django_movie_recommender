@@ -6,20 +6,19 @@ from django.db import models
 
 
 class Movie_Collected(models.Model):
-    tmdb_id = models.IntegerField(null=True, unique=False)
-    imdb_id = models.CharField(max_length=50, null=True)
+    id = models.IntegerField(null=False, primary_key=True)
+    tmdb_id = models.IntegerField(null=True, unique=True)
     original_title = models.CharField(max_length=1000, null=False)
-    original_language = models.CharField(max_length=1000, null=False)
+    original_language = models.CharField(max_length=1000, null=True)
     overview = models.TextField(null=True)
     genres = models.TextField(null=True)
     popularity = models.FloatField(null=True)
     poster_path = models.CharField(max_length=1000, null=True)
-    production_company_name = models.CharField(max_length=1000, null=True)
-    production_company_poster = models.CharField(max_length=1000, null=True)
+    production_company= models.CharField(max_length=1000, null=True)
     vote_average = models.FloatField(null=True)
     vote_count = models.IntegerField(null=True)
     revenue = models.BigIntegerField(null=True)
-    release_date = models.CharField(max_length=100, null=True)
+    year = models.IntegerField(null=True)
     adult = models.BooleanField(null=True)
     budget = models.BigIntegerField(null=True)
     spoken_languages = models.TextField(null=True)
@@ -32,15 +31,15 @@ class Movie_Collected(models.Model):
 
 
 class Movie_Details(models.Model):
-    movie = models.ForeignKey(Movie_Collected, on_delete=models.CASCADE)
-    imdb_id = models.CharField(max_length=50, null=True)
+    tmdb_id = models.IntegerField(null=True, unique=True)
     cast = models.TextField(null=True)
     crew = models.TextField(null=True)
     director = models.CharField(max_length=1000, null=True)
+    soup = models.TextField(null=True)
 
 
 class MovieRatings(models.Model):
-    movie = models.ForeignKey(Movie_Collected, on_delete=models.CASCADE)
+    tmdb_id = models.IntegerField(null=True, unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True)
     review = models.TextField(null=True)

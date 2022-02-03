@@ -44,13 +44,16 @@ INSTALLED_APPS = [
     'api',
     'movies',
     'user_movies',
+    'recommendations',
     # Third Party Apps
+    "corsheaders",
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,7 +90,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'movie_db.sqlite3'),
+            'NAME': os.path.join(BASE_DIR, 'movie_recommendation_db.sqlite3'),
         }
     }
 else:
@@ -142,7 +145,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static'),  # static files for production after frontend is ready
 ]
 
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+
 AUTH_USER_MODEL = 'api.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
