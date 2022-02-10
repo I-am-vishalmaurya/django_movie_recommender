@@ -68,26 +68,27 @@ def create_rating(request, movie_id):
             try:
                 if 'rating' in request.data:
                     movie = Movie_Collected.objects.get(pk=movie_id)
-                    rating = request.data.get('rating')
-                    if rating is not None:
-                        movie_rating_object = MovieRatings.objects.filter(user=request.user, movie=movie).exists()
-                        if movie_rating_object:
-                            MovieRatings.objects.filter(user=request.user, movie=movie).update(rating=rating)
-                            return Response(status=status.HTTP_200_OK)
-                        else:
-                            MovieRatings.objects.create(user=request.user, movie=movie, rating=rating)
-                            to_update = Movie_Collected.objects.filter(pk=movie_id)
-                            to_update.update(
-                                # Increase vote average and vote count
-                                vote_average=round(
-                                    (to_update.get().vote_average * to_update.get().vote_count + request.data.get(
-                                        'rating')) / (to_update.get().vote_count + 1), 2),
-                                vote_count=to_update.get().vote_count + 1
-                            )
-                            return Response(status=status.HTTP_200_OK)
+                    if request.data.get('rating'):
+                        rating = request.data.get('rating')
                     else:
-                        message = {"error": "Rating field is empty"}
-                        return Response(data=message, status=status.HTTP_406_NOT_ACCEPTABLE)
+                        rating = None
+
+                    movie_rating_object = MovieRatings.objects.filter(user=request.user, movie=movie).exists()
+                    if movie_rating_object:
+                        MovieRatings.objects.filter(user=request.user, movie=movie).update(rating=rating)
+                        return Response(status=status.HTTP_200_OK)
+                    else:
+                        MovieRatings.objects.create(user=request.user, movie=movie, rating=rating)
+                        to_update = Movie_Collected.objects.filter(pk=movie_id)
+                        to_update.update(
+                                # Increase vote average and vote count
+                            vote_average=round(
+                                (to_update.get().vote_average * to_update.get().vote_count + request.data.get(
+                                    'rating')) / (to_update.get().vote_count + 1), 2),
+                            vote_count=to_update.get().vote_count + 1
+                        )
+                        return Response(status=status.HTTP_200_OK)
+
                 else:
                     message = {"error": "Rating field is missing"}
                     return Response(data=message, status=status.HTTP_406_NOT_ACCEPTABLE)

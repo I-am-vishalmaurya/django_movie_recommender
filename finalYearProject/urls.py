@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
-    path('api/', include('api.urls')),
     path('api/v1/movies/', include('movies.urls')),
     path('api/v1/watchlist/', include('user_movies.urls')),
     path('api/v1/ml/', include('recommendations.urls')),

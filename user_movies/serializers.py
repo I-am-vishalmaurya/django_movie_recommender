@@ -5,7 +5,6 @@ from user_movies.models import WatchList
 class MovieDetailSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     original_title = serializers.CharField(max_length=255)
-    imdb_id = serializers.CharField(max_length=50)
     vote_average = serializers.FloatField()
     vote_count = serializers.IntegerField()
     original_language = serializers.CharField(max_length=1000)

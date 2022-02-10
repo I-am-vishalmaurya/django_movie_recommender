@@ -1,7 +1,7 @@
 django==2.2.5
 djangorestframework==3.12.4
 djoser==2.1.0
-django-environ==0.8.1
+django-environ==0.8.1y
 Pillow==8.4.0
 pandas==1.4.0
 requests==2.27.1
