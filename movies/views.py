@@ -8,6 +8,18 @@ from .serializers import Movie_Collected_Serializer
 
 # Create your views here.
 
+@api_view(['GET'])
+def top_10(request):
+    """
+    This function returns the top 10 movies from the database.
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        movie_ratings = Movie_Collected.objects.all().order_by('-vote_count')[:10]
+        serializer = Movie_Collected_Serializer(movie_ratings, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def movies(request, movie_id):
@@ -78,10 +90,10 @@ def create_rating(request, movie_id):
                         MovieRatings.objects.filter(user=request.user, movie=movie).update(rating=rating)
                         return Response(status=status.HTTP_200_OK)
                     else:
-                        MovieRatings.objects.create(user=request.user, movie=movie, rating=rating)
+                        MovieRatings.objects.create(user=request.user, movie_id=movie.id, rating=rating)
                         to_update = Movie_Collected.objects.filter(pk=movie_id)
                         to_update.update(
-                                # Increase vote average and vote count
+                            # Increase vote average and vote count
                             vote_average=round(
                                 (to_update.get().vote_average * to_update.get().vote_count + request.data.get(
                                     'rating')) / (to_update.get().vote_count + 1), 2),

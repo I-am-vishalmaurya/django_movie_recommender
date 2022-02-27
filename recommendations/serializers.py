@@ -15,3 +15,6 @@ class MovieSerializer(serializers.Serializer):
 
     def get_ratings(self, movie: Movie_Collected):
         return movie.vote_count / movie.vote_average
+
+
+

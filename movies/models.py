@@ -39,7 +39,7 @@ class Movie_Details(models.Model):
 
 
 class MovieRatings(models.Model):
-    tmdb_id = models.IntegerField(null=True, unique=True)
+    movie = models.ForeignKey(Movie_Collected, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rating = models.IntegerField(null=True)
     review = models.TextField(null=True)

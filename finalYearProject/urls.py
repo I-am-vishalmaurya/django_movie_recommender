@@ -13,10 +13,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+# from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.views.generic import TemplateView
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="React Native Movie Recommendation API",
+        default_version='v1',
+        description="Welcome to the movie recommendation API",
+        contact=openapi.Contact(email="vishalmaurya3112@gmail.com"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +38,9 @@ urlpatterns = [
     path('api/v1/movies/', include('movies.urls')),
     path('api/v1/watchlist/', include('user_movies.urls')),
     path('api/v1/ml/', include('recommendations.urls')),
+
+    path('docs/', schema_view.with_ui('swagger', cache_timeout=0),
+         name='schema-swagger-ui'),
 
 ]
 

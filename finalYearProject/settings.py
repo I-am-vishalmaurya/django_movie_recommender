@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     'user_movies',
     'recommendations',
     # Third Party Apps
+    'rest_framework_swagger',
     "corsheaders",
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -162,6 +164,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' # AutoSchema
 }
 
 # Email Settings

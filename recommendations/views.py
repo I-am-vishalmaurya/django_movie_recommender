@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from movies.models import MovieRatings, Movie_Collected
 from .serializers import MovieSerializer
+from movies.serializers import Movie_Collected_Serializer
 import pandas as pd
 import pickle
 import warnings
@@ -49,21 +50,9 @@ def get_similar_recommendation(request):
         movie = request.data['movie']
         similar_movies = improved_recommendations(movie).id.values
         similar_movies = Movie_Collected.objects.filter(id__in=similar_movies)
-        serializer = MovieSerializer(similar_movies, many=True)
+        serializer = Movie_Collected_Serializer(similar_movies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-@api_view(['POST'])
-def top_10(request):
-    """
-    This function returns the top 10 movies from the database.
-    :param request:
-    :return:
-    """
-    if request.method == 'GET':
-        movie_ratings = Movie_Collected.objects.all().order_by('-vote_count')[:10]
-        serializer = MovieSerializer(movie_ratings, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+
