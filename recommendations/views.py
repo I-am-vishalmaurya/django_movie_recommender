@@ -10,14 +10,13 @@ import pickle
 import warnings
 warnings.filterwarnings("ignore")
 
-cosine_sim = pickle.load(open('management/working/similarity.pkl', 'rb'))
-df = pd.DataFrame(list(Movie_Collected.objects.all().values()))
-df = df.reset_index()
-titles = df['original_title']
-indices = pd.Series(df.index, index=titles)
-
 
 def improved_recommendations(title):
+    cosine_sim = pickle.load(open('management/working/similarity.pkl', 'rb'))
+    df = pd.DataFrame(list(Movie_Collected.objects.all().values()))
+    df = df.reset_index()
+    titles = df['original_title']
+    indices = pd.Series(df.index, index=df['id'])
     idx = indices[title]
     sim_scores = list(enumerate(cosine_sim[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
