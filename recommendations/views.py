@@ -8,15 +8,17 @@ from movies.serializers import Movie_Collected_Serializer
 import pandas as pd
 import pickle
 import warnings
+
 warnings.filterwarnings("ignore")
+
+cosine_sim = pickle.load(open('management/working/similarity.pkl', 'rb'))
+df = pd.DataFrame(list(Movie_Collected.objects.all().values()))
+df = df.reset_index()
+titles = df['original_title']
+indices = pd.Series(df.index, index=titles)
 
 
 def improved_recommendations(title):
-    cosine_sim = pickle.load(open('management/working/similarity.pkl', 'rb'))
-    df = pd.DataFrame(list(Movie_Collected.objects.all().values()))
-    df = df.reset_index()
-    titles = df['original_title']
-    indices = pd.Series(df.index, index=df['id'])
     idx = indices[title]
     sim_scores = list(enumerate(cosine_sim[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
@@ -52,6 +54,3 @@ def get_similar_recommendation(request):
         serializer = Movie_Collected_Serializer(similar_movies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-
