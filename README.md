@@ -28,7 +28,8 @@ The defualt database used by the current code is sqlite and the database name is
 You can choose mysql as your database if you want to use the mysql database.
 
 ### Here are the screenshots for the API documentation
-[![API Documentation](https://user-images.githubusercontent.com/9554297/84598961-f9c8b580-b8c1-11ea-9c0c-e9f8d9f9f9d9.png)](https://user-images.githubusercontent.com/9554297/84598961-f9c8b580-b8c1-11ea-9c0c-e9f8d9f9f9d9.png)
+![API Documentation](https://github.com/I-am-vishalmaurya/django_movie_recommender/blob/master/media/api-ss.png?raw=true)
 
-
+### Screenshots for the database designs.
+![Database Screenshots](https://github.com/I-am-vishalmaurya/django_movie_recommender/blob/master/media/database_desgin.png?raw=true)
 
