@@ -6,5 +6,6 @@ urlpatterns = [
     path('search_movies/<str:movie_title>', views.search_movie, name='search_movie'),
     path('add_comments/<int:movie_id>', views.add_comments, name='add_comments'),
     path('rate_movie/<int:movie_id>', views.create_rating, name='rate_movie'),
+    path('get_rating/<int:movie_id>', views.getUserRatedMovies, name='get_rating'),
     path('top/', views.top_10, name='top10'),
 ]

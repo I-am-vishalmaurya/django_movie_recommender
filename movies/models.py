@@ -44,3 +44,6 @@ class MovieRatings(models.Model):
     rating = models.IntegerField(null=True)
     review = models.TextField(null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.movie, self.user, self.rating, self.review, self.timestamp

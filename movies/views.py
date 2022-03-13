@@ -3,7 +3,7 @@ from .models import Movie_Collected, MovieRatings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import Movie_Collected_Serializer
+from .serializers import Movie_Collected_Serializer, MovieRatingSerializer
 
 
 # Create your views here.
@@ -75,22 +75,27 @@ def add_comments(request, movie_id):
 
 @api_view(['POST'])
 def create_rating(request, movie_id):
+    # global review, rating
     if request.method == 'POST':
         if movie_id is not None:
             try:
-                if 'rating' in request.data:
+                if 'rating' in request.data or 'review' in request.data:
                     movie = Movie_Collected.objects.get(pk=movie_id)
-                    if request.data.get('rating'):
+                    if 'rating' in request.data:
                         rating = request.data.get('rating')
+                        if 'review' in request.data:
+                            review = request.data.get('review')
+                        else:
+                            review = None
                     else:
                         rating = None
 
                     movie_rating_object = MovieRatings.objects.filter(user=request.user, movie=movie).exists()
                     if movie_rating_object:
-                        MovieRatings.objects.filter(user=request.user, movie=movie).update(rating=rating)
+                        MovieRatings.objects.filter(user=request.user, movie=movie).update(rating=rating, review=review)
                         return Response(status=status.HTTP_200_OK)
                     else:
-                        MovieRatings.objects.create(user=request.user, movie_id=movie.id, rating=rating)
+                        MovieRatings.objects.create(user=request.user, movie_id=movie.id, rating=rating, review=review)
                         to_update = Movie_Collected.objects.filter(pk=movie_id)
                         to_update.update(
                             # Increase vote average and vote count
@@ -107,10 +112,22 @@ def create_rating(request, movie_id):
             except Movie_Collected.DoesNotExist:
                 message = {"error": "Movie does not exist"}
                 return Response(data=message, status=status.HTTP_404_NOT_FOUND)
-
         else:
             message = {"error": "Movie id is empty"}
             return Response(data=message, status=status.HTTP_400_BAD_REQUEST)
 
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def getUserRatedMovies(request, movie_id):
+    if request.method == 'GET':
+        user_ratings = MovieRatings.objects.filter(user_id=request.user.id, movie_id=movie_id)
+        if user_ratings.exists():
+            ratings = MovieRatings.objects.get(user_id=request.user.id, movie_id=movie_id)
+            serializer = MovieRatingSerializer(ratings)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            message = {"error": "User has no ratings"}
+            return Response(data=message, status=status.HTTP_404_NOT_FOUND)
