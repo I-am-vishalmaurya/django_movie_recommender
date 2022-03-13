@@ -1,6 +1,7 @@
 .idea
 dataset
 fill_data.py
+movie_recommendation_db.sqlite3
 ssh
 id_rsa
 id_rsa.pub
